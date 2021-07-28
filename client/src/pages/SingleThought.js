@@ -3,13 +3,15 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { QUERY_THOUGHT } from '../utils/queries';
 import ReactionList from '../components/ReactionList';
+import Auth from '../utils/auth'
+import ReactionForm from '../components/ReactionForm';
 
 
 const SingleThought = props => {
   const { id: thoughtId } = useParams();
 
-  const {loading, data} = useQuery(QUERY_THOUGHT, {
-    variables: {id: thoughtId}
+  const { loading, data } = useQuery(QUERY_THOUGHT, {
+    variables: { id: thoughtId }
   })
 
   const thought = data?.thought || {};
@@ -32,7 +34,8 @@ const SingleThought = props => {
         </div>
       </div>
 
-      {thought.reactionCount > 0 && <ReactionList reactions={thought.reactions}/>}
+      {thought.reactionCount > 0 && <ReactionList reactions={thought.reactions} />}
+      {Auth.loggedIn() && <ReactionForm thoughtId={thought._id} />}
     </div>
   );
 };
